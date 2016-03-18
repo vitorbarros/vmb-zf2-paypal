@@ -1,0 +1,20 @@
+{
+    "name": "vitorbarros/vmb-zf2-pay-pal",
+    "description": "Implementcao da SDK do paypal para o zend2",
+    "type": "library",
+    "require": {
+        "paypal/rest-api-sdk-php": "^1.6"
+    },
+    "authors": [
+        {
+            "name": "Vitor Barros",
+            "email": "vitormonteirodebarros@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "VMBPayPal\\":"src/",
+            "PayPal\\":"vendor/paypal/rest-api-sdk-php/lib/"
+        }
+    }
+}
