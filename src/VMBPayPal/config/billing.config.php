@@ -6,7 +6,7 @@ return array(
         'name' => '',
         'description' => '',
         'type' => '',
-        'definition' => array(
+        'paymentDefinition' => array(
             'name' => '',
             'type' => '',
             'frequency' => '',
@@ -21,15 +21,15 @@ return array(
                 'amount' => array(
                     'value' => '',
                     'currency' => '',
+                ),
+                'merchantPreferences' => array(
+                    'returnUrl' => '',
+                    'cancelUrl' => '',
+                    'autoBillAmount' => '',
+                    'initialFailAmountAction' => '',
+                    'maxFailAttempts' => ''
                 )
-            )
+            ),
         ),
-        'merchantPreferences' => array(
-            'returnUrl' => '',
-            'cancelUrl' => '',
-            'autoBillAmount' => '',
-            'initialFailAmountAction' => '',
-            'maxFailAttempts' => ''
-        )
     )
 );
