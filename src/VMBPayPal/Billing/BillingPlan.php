@@ -2,11 +2,15 @@
 namespace VMBPayPal\Billing;
 
 use PayPal\Api\MerchantPreferences;
+use PayPal\Api\Patch;
+use PayPal\Api\PatchRequest;
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\Plan;
 use PayPal\Api\ChargeModel;
 use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Common\PayPalModel;
 use PayPal\Rest\ApiContext;
+use Zend\Json\Json;
 
 abstract class BillingPlan extends Plan
 {
@@ -30,21 +34,11 @@ abstract class BillingPlan extends Plan
         $this->config = include __DIR__ . '/../config/billing.config.php';
         $this->credentialsConfig = include __DIR__ . '/../config/credentials.config.php';
 
-    }
-
-    /**
-     * Método que recebe todas as requisições e chama os métodos privados
-     * @param $dados
-     * @param $method
-     * @return mixed
-     */
-    public function billingRequest($dados = null, $method)
-    {
         $this->context = new ApiContext(new OAuthTokenCredential($this->credentialsConfig['client_id'], $this->credentialsConfig['client_secret']));
-        return $this->$method($dados);
+
     }
 
-    private function newBillingPlan(array $dados, $defautlClass = 'plan')
+    public function newBillingPlan(array $dados, $defautlClass = 'plan')
     {
 
         try {
@@ -103,22 +97,49 @@ abstract class BillingPlan extends Plan
             return $retorno->getId();
 
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            die();
+            return $e->getMessage();
         }
 
     }
 
-    private function getAllBillingPlan(array $parans = array())
+    public function statusChangeBillingPlan($status, $billinPlanId)
     {
-        try{
-            return $this::all(array($parans),$this->context);
-        }catch(\Exception $e) {
+
+        if ($status != null && $billinPlanId != null) {
+            try {
+
+                $patch = new Patch();
+                $value = new PayPalModel(Json::encode(array("state" => $status)));
+
+                $patch->setOp('replace')
+                    ->setPath('/')
+                    ->setValue($value);
+
+                $patchRequest = new PatchRequest();
+                $patchRequest->addPatch($patch);
+
+                $createdPlan = $this::get($billinPlanId, $this->context);
+                $createdPlan->update($patchRequest, $this->context);
+
+                return $this::get($createdPlan->getId(), $this->context);
+
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
+        throw new \Exception("Status and Plan id cannot be null");
+    }
+
+    public function getAllBillingPlan(array $parans = array())
+    {
+        try {
+            return $this::all(array($parans), $this->context);
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
-    private function getBillingPlan($billingId)
+    public function getBillingPlan($billingId)
     {
 
         if ($billingId != null) {
