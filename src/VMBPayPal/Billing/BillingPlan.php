@@ -34,11 +34,12 @@ abstract class BillingPlan extends Plan
 
     /**
      * Método que recebe todas as requisições e chama os métodos privados
-     * @param array $dados
+     * @param $dados
      * @param $method
      * @return mixed
      */
-    public function billingRequest(array $dados = array(), $method) {
+    public function billingRequest($dados, $method)
+    {
         $this->context = new ApiContext(new OAuthTokenCredential($this->credentialsConfig['client_id'], $this->credentialsConfig['client_secret']));
         return $this->$method($dados);
     }
@@ -108,8 +109,18 @@ abstract class BillingPlan extends Plan
 
     }
 
-    private function getBillingPlan() {
-        
+    private function getBillingPlan($billingId)
+    {
+
+        if($billingId != null) {
+            try{
+                return $this::get($billingId, $this->context);
+            }catch(\Exception $e) {
+                return $e->getMessage();
+            }
+        }
+        throw new \Exception("Plan id cannot be null");
+
     }
 
     private function arrayDadosVerify(array $dados, $methodCondfg)
