@@ -38,7 +38,7 @@ abstract class BillingPlan extends Plan
      * @param $method
      * @return mixed
      */
-    public function billingRequest($dados, $method)
+    public function billingRequest($dados = null, $method)
     {
         $this->context = new ApiContext(new OAuthTokenCredential($this->credentialsConfig['client_id'], $this->credentialsConfig['client_secret']));
         return $this->$method($dados);
@@ -109,13 +109,22 @@ abstract class BillingPlan extends Plan
 
     }
 
+    private function getAllBillingPlan(array $parans = array())
+    {
+        try{
+            return $this::all(array($parans),$this->context);
+        }catch(\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     private function getBillingPlan($billingId)
     {
 
-        if($billingId != null) {
-            try{
+        if ($billingId != null) {
+            try {
                 return $this::get($billingId, $this->context);
-            }catch(\Exception $e) {
+            } catch (\Exception $e) {
                 return $e->getMessage();
             }
         }
