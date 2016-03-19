@@ -108,6 +108,10 @@ abstract class BillingPlan extends Plan
 
     }
 
+    private function getBillingPlan() {
+        
+    }
+
     private function arrayDadosVerify(array $dados, $methodCondfg)
     {
 
