@@ -3,6 +3,7 @@ namespace VMBPayPal;
 
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\Plan;
+use VMBPayPal\Service\AgreementService;
 use VMBPayPal\Service\BillingService;
 
 class Module
@@ -28,9 +29,11 @@ class Module
         return array(
             'factories' => array(
                 'VMBPayPal\Service\Billing' => function($sm) {
-                    $paymentDefinition = new PaymentDefinition();
-                    return new BillingService($paymentDefinition);
-                }
+                    return new BillingService();
+                },
+                'VMBPayPal\Service\Agreement' => function($sm) {
+                    return new AgreementService();
+                },
             )
         );
     }
