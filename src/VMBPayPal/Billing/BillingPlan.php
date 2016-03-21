@@ -121,7 +121,7 @@ abstract class BillingPlan extends Plan
                 $createdPlan = $this::get($billinPlanId, $this->context);
                 $createdPlan->update($patchRequest, $this->context);
 
-                return $this::get($createdPlan->getId(), $this->context);
+                return $createdPlan->getId();
 
             } catch (\Exception $e) {
                 return $e->getMessage();
