@@ -1,6 +1,7 @@
 <?php
 namespace VMBPayPal\Billing;
 
+use PayPal\Api\Plan;
 use PayPal\Common\PayPalModel;
 use VMBPayPal\AbstractClass\AbstractModel;
 use Zend\Json\Json;
@@ -111,8 +112,7 @@ abstract class BillingPlan extends AbstractModel
     public function getAllBillingPlan(array $parans = array())
     {
         try {
-            $plan = $this->plan;
-            return $plan::all(array($parans), $this->context);
+            return Plan::all($parans, $this->context);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -123,8 +123,7 @@ abstract class BillingPlan extends AbstractModel
 
         if ($billingId != null) {
             try {
-                $plan = $this->plan;
-                return $plan::get($billingId, $this->context);
+                return Plan::get($billingId, $this->context);
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
