@@ -3,9 +3,11 @@ namespace VMBPayPal\AbstractClass;
 
 use PayPal\Api\Agreement;
 use PayPal\Api\MerchantPreferences;
+use PayPal\Api\Payer;
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\Plan;
 use PayPal\Api\ChargeModel;
+use PayPal\Api\ShippingAddress;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
 
@@ -21,6 +23,8 @@ abstract class AbstractModel
     protected $method;
     protected $credentialsConfig;
     protected $agreement;
+    protected $payer;
+    protected $shippingAddress;
 
     public function __construct()
     {
@@ -30,6 +34,8 @@ abstract class AbstractModel
         $this->merchantPreferences = new MerchantPreferences();
         $this->plan = new Plan();
         $this->agreement = new Agreement();
+        $this->payer = new Payer();
+        $this->shippingAddress = new ShippingAddress();
 
         $this->config = include __DIR__ . '/../config/billing.config.php';
         $this->credentialsConfig = include __DIR__ . '/../config/credentials.config.php';
