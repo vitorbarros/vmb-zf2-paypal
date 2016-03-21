@@ -19,24 +19,25 @@ class BillingAgreement extends AbstractModel
     {
 
         $this->agreement->setName('PR')
-            ->setDescription('Pagamento recorrent')
-            ->setStartDate($this->startDate->format('Y-m-d H:i:s'));
+            ->setDescription('Pagamento recorrente')
+            ->setStartDate('2019-06-17T9:45:04Z');
+
+        $this->plan->setId($billinPlanId);
+        $this->agreement->setPlan($this->plan);
 
         $this->payer->setPaymentMethod('paypal');
+        $this->agreement->setPayer($this->payer);
 
         $this->shippingAddress->setLine1($address)
             ->setCity($city)
             ->setState($state)
             ->setPostalCode($postCode)
             ->setCountryCode($countryCode);
-
-        $this->agreement->setPayer($this->payer)
-            ->setPlan(Plan::get($billinPlanId))
-            ->setShippingAddress($this->shippingAddress);
+        $this->agreement->setShippingAddress($this->shippingAddress);
 
         try{
-            $this->agreement->create($this->context);
-            return $this->agreement->getApprovalLink();
+            $agreement = $this->agreement->create($this->context);
+            return $agreement->getApprovalLink();
         }catch(\Exception $e) {
             return $e->getMessage();
         }

@@ -29,6 +29,11 @@ abstract class AbstractModel
     public function __construct()
     {
 
+        $this->credentialsConfig = include __DIR__ . '/../config/credentials.config.php';
+        $this->config = include __DIR__ . '/../config/billing.config.php';
+
+        $this->context = new ApiContext(new OAuthTokenCredential($this->credentialsConfig['client_id'], $this->credentialsConfig['client_secret']));
+
         $this->paymentDefinition = new PaymentDefinition();
         $this->chargeModel = new ChargeModel();
         $this->merchantPreferences = new MerchantPreferences();
@@ -36,11 +41,6 @@ abstract class AbstractModel
         $this->agreement = new Agreement();
         $this->payer = new Payer();
         $this->shippingAddress = new ShippingAddress();
-
-        $this->config = include __DIR__ . '/../config/billing.config.php';
-        $this->credentialsConfig = include __DIR__ . '/../config/credentials.config.php';
-
-        $this->context = new ApiContext(new OAuthTokenCredential($this->credentialsConfig['client_id'], $this->credentialsConfig['client_secret']));
 
     }
 
