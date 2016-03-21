@@ -11,4 +11,9 @@ class BillingAgreement extends AbstractModel
         parent::__construct();
     }
 
+    public function newAgreement()
+    {
+
+    }
+
 }

@@ -109,13 +109,16 @@ abstract class BillingPlan extends AbstractModel
         throw new \Exception("Status and Plan id cannot be null");
     }
 
-    public function getAllBillingPlan(array $parans = array())
+    public function getAllBillingPlan(array $parans)
     {
-        try {
-            return Plan::all($parans, $this->context);
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        if(!empty($parans)) {
+            try {
+                return Plan::all($parans, $this->context);
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
         }
+        throw new \Exception("Parans cannot be null");
     }
 
     public function getBillingPlan($billingId)
