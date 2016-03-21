@@ -1,6 +1,7 @@
 <?php
 namespace VMBPayPal\Agreement;
 
+use PayPal\Api\Agreement;
 use VMBPayPal\AbstractClass\AbstractModel;
 
 class BillingAgreement extends AbstractModel
@@ -11,7 +12,9 @@ class BillingAgreement extends AbstractModel
     public function __construct()
     {
         parent::__construct();
-        $this->startDate = new \DateTime("now");
+        $date = new \DateTime("tomorrow");
+        $date = str_replace(" ","T",$date->format('Y-m-d H:i:s')) . 'Z';
+        $this->startDate = $date;
     }
 
     public function newAgreement($billinPlanId, $address, $city, $state, $postCode, $countryCode)
@@ -24,7 +27,7 @@ class BillingAgreement extends AbstractModel
 
         $this->agreement->setName('PR')
             ->setDescription('Pagamento recorrente')
-            ->setStartDate('2019-06-17T9:45:04Z');
+            ->setStartDate($this->startDate);
 
         $this->plan->setId($billinPlanId);
         $this->agreement->setPlan($this->plan);
@@ -39,13 +42,34 @@ class BillingAgreement extends AbstractModel
             ->setCountryCode($countryCode);
         $this->agreement->setShippingAddress($this->shippingAddress);
 
-        try{
+        try {
             $agreement = $this->agreement->create($this->context);
             return $agreement->getApprovalLink();
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
 
+    }
+
+    public function executeAgreement($token)
+    {
+        try{
+            $agreement = $this->agreement->execute($token,$this->context);
+            return $agreement->getId();
+        }catch(\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getAgreementByTransactionId($transacionId, array $param = array())
+    {
+        if ($transacionId != null) {
+            $result = Agreement::searchTransactions($transacionId, $param, $this->context);
+            echo '<pre>';
+            print_r($result);
+            exit;
+        }
+        throw new \Exception("Transacion Id cannot be null");
     }
 
 }
