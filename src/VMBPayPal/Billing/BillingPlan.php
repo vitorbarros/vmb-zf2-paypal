@@ -1,43 +1,18 @@
 <?php
 namespace VMBPayPal\Billing;
 
-use PayPal\Api\MerchantPreferences;
+use PayPal\Common\PayPalModel;
+use VMBPayPal\AbstractClass\AbstractModel;
+use Zend\Json\Json;
 use PayPal\Api\Patch;
 use PayPal\Api\PatchRequest;
-use PayPal\Api\PaymentDefinition;
-use PayPal\Api\Plan;
-use PayPal\Api\ChargeModel;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Common\PayPalModel;
-use PayPal\Rest\ApiContext;
-use Zend\Json\Json;
 
-abstract class BillingPlan extends Plan
+abstract class BillingPlan extends AbstractModel
 {
 
-    private $paymentDefinition;
-    private $chargeModel;
-    private $merchantPreferences;
-    private $method;
-    private $credentialsConfig;
-    private $context;
-
-    protected $config = array();
-
-    public function __construct($data = null)
+    public function __construct()
     {
-
         parent::__construct();
-
-        $this->paymentDefinition = new PaymentDefinition();
-        $this->chargeModel = new ChargeModel();
-        $this->merchantPreferences = new MerchantPreferences();
-
-        $this->config = include __DIR__ . '/../config/billing.config.php';
-        $this->credentialsConfig = include __DIR__ . '/../config/credentials.config.php';
-
-        $this->context = new ApiContext(new OAuthTokenCredential($this->credentialsConfig['client_id'], $this->credentialsConfig['client_secret']));
-
     }
 
     public function newBillingPlan(array $dados, $defautlClass = 'plan')
@@ -63,7 +38,7 @@ abstract class BillingPlan extends Plan
                     $setMethod = 'set' . ucfirst($method);
 
                     if ($defautlClass == 'plan') {
-                        $this->$setMethod($dado);
+                        $this->plan->$setMethod($dado);
                     } else if ($defautlClass == 'paymentDefinition') {
                         $this->paymentDefinition->$setMethod($dado);
                     } else if ($defautlClass == 'chargeModel') {
@@ -91,10 +66,10 @@ abstract class BillingPlan extends Plan
                 }
             }
 
-            $this->setPaymentDefinitions(array($this->paymentDefinition));
-            $this->setMerchantPreferences($this->merchantPreferences);
+            $this->plan->setPaymentDefinitions(array($this->paymentDefinition));
+            $this->plan->setMerchantPreferences($this->merchantPreferences);
 
-            $retorno = $this->create($this->context);
+            $retorno = $this->plan->create($this->context);
 
             return $retorno->getId();
 
@@ -120,7 +95,8 @@ abstract class BillingPlan extends Plan
                 $patchRequest = new PatchRequest();
                 $patchRequest->addPatch($patch);
 
-                $createdPlan = $this::get($billinPlanId, $this->context);
+                $plan = $this->plan;
+                $createdPlan = $plan::get($billinPlanId, $this->context);
                 $createdPlan->update($patchRequest, $this->context);
 
                 return $createdPlan->getId();
@@ -135,7 +111,8 @@ abstract class BillingPlan extends Plan
     public function getAllBillingPlan(array $parans = array())
     {
         try {
-            return $this::all(array($parans), $this->context);
+            $plan = $this->plan;
+            return $plan::all(array($parans), $this->context);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -146,7 +123,8 @@ abstract class BillingPlan extends Plan
 
         if ($billingId != null) {
             try {
-                return $this::get($billingId, $this->context);
+                $plan = $this->plan;
+                return $plan::get($billingId, $this->context);
             } catch (\Exception $e) {
                 return $e->getMessage();
             }
@@ -160,7 +138,8 @@ abstract class BillingPlan extends Plan
 
         if ($billingId != null) {
             try {
-                $plan = $this::get($billingId);
+                $planObj = $this->plan;
+                $plan = $planObj::get($billingId);
                 $plan->delete($this->context);
                 return $plan->getId();
             } catch (\Exception $e) {
