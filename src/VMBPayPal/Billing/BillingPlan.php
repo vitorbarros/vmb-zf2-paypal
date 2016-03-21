@@ -153,6 +153,21 @@ abstract class BillingPlan extends Plan
 
     }
 
+    public function deleteBillingPlan($billingId)
+    {
+
+        if ($billingId != null) {
+            try {
+                $plan = $this::get($billingId);
+                $plan->delete($this->context);
+                return $plan->getId();
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
+        throw new \Exception("Plan id cannot be null");
+    }
+
     private function arrayDadosVerify(array $dados, $methodCondfg)
     {
 
