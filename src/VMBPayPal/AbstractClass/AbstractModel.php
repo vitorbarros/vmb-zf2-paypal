@@ -44,4 +44,98 @@ abstract class AbstractModel
 
     }
 
+    protected function dataFormat(array $dados)
+    {
+        if (!empty($dados)) {
+            foreach ($dados as $key => $dado) {
+                $dados[$key] = ucfirst(strtolower($dado));
+            }
+            return $dados;
+        }
+        throw new \Exception("dados não pode ser vazio");
+    }
+
+    protected function arrayDadosVerify(array $dados, $methodCondfg)
+    {
+
+        $diff = array();
+        if (isset($this->config[$methodCondfg])) {
+
+            $diff = array_diff_key($this->config[$methodCondfg], $dados);
+            if (!empty($diff)) {
+                throw new \Exception("Array dados is invalid, please check config billing file");
+            }
+
+        } else {
+            throw new \Exception("undefined index {$methodCondfg}, please check config billing file");
+        }
+
+    }
+
+    protected function changeConfigArray($configuration)
+    {
+        switch ($configuration) {
+            case 'paymentDefinition':
+                $this->config = array(
+                    'newBillingPlan' => array(
+                        'name' => '',
+                        'type' => '',
+                        'frequency' => '',
+                        'frequencyInterval' => '',
+                        'cycles' => '',
+                        'amount' => array(
+                            'value' => '',
+                            'currency' => '',
+                        ),
+                        'chargeModel' => array(
+                            'type' => '',
+                            'amount' => array(
+                                'value' => '',
+                                'currency' => '',
+                            ),
+                            'merchantPreferences' => array(
+                                'returnUrl' => '',
+                                'cancelUrl' => '',
+                                'autoBillAmount' => '',
+                                'initialFailAmountAction' => '',
+                                'maxFailAttempts' => ''
+                            )
+                        ),
+                    )
+                );
+                break;
+
+            case 'chargeModel' :
+                $this->config = array(
+                    'newBillingPlan' => array(
+                        'type' => '',
+                        'amount' => array(
+                            'value' => '',
+                            'currency' => '',
+                        ),
+                        'merchantPreferences' => array(
+                            'returnUrl' => '',
+                            'cancelUrl' => '',
+                            'autoBillAmount' => '',
+                            'initialFailAmountAction' => '',
+                            'maxFailAttempts' => ''
+                        )
+                    ),
+                );
+                break;
+            case 'merchantPreferences':
+                $this->config = array(
+                    'newBillingPlan' => array(
+                        'returnUrl' => '',
+                        'cancelUrl' => '',
+                        'autoBillAmount' => '',
+                        'initialFailAmountAction' => '',
+                        'maxFailAttempts' => ''
+                    ),
+                );
+                break;
+
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
 <?php
 namespace VMBPayPal\Agreement;
 
-use PayPal\Api\Plan;
 use VMBPayPal\AbstractClass\AbstractModel;
 
 class BillingAgreement extends AbstractModel
@@ -18,6 +17,11 @@ class BillingAgreement extends AbstractModel
     public function newAgreement($billinPlanId, $address, $city, $state, $postCode, $countryCode)
     {
 
+        $dados = $this->dataFormat(array(
+            'address' => $address,
+            'city' => $city,
+        ));
+
         $this->agreement->setName('PR')
             ->setDescription('Pagamento recorrente')
             ->setStartDate('2019-06-17T9:45:04Z');
@@ -28,8 +32,8 @@ class BillingAgreement extends AbstractModel
         $this->payer->setPaymentMethod('paypal');
         $this->agreement->setPayer($this->payer);
 
-        $this->shippingAddress->setLine1($address)
-            ->setCity($city)
+        $this->shippingAddress->setLine1($dados['address'])
+            ->setCity($dados['city'])
             ->setState($state)
             ->setPostalCode($postCode)
             ->setCountryCode($countryCode);
