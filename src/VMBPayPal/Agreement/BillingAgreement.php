@@ -1,7 +1,14 @@
 <?php
 namespace VMBPayPal\Agreement;
 
-class BillingAgreement
+use PayPal\Api\Agreement;
+
+class BillingAgreement extends Agreement
 {
+
+    public function __construct($data = null)
+    {
+        parent::__construct($data);
+    }
 
 }

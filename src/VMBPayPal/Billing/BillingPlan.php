@@ -24,10 +24,12 @@ abstract class BillingPlan extends Plan
 
     protected $config = array();
 
-    public function __construct(PaymentDefinition $paymentDefinition)
+    public function __construct($data = null)
     {
 
-        $this->paymentDefinition = $paymentDefinition;
+        parent::__construct();
+
+        $this->paymentDefinition = new PaymentDefinition();
         $this->chargeModel = new ChargeModel();
         $this->merchantPreferences = new MerchantPreferences();
 
