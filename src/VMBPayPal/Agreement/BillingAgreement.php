@@ -13,7 +13,7 @@ class BillingAgreement extends AbstractModel
 
     public function newAgreement()
     {
-
+        
     }
 
 }

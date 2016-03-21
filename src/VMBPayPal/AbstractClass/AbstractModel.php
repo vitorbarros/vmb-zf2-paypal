@@ -1,6 +1,7 @@
 <?php
 namespace VMBPayPal\AbstractClass;
 
+use PayPal\Api\Agreement;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\Plan;
@@ -19,6 +20,7 @@ abstract class AbstractModel
     protected $config;
     protected $method;
     protected $credentialsConfig;
+    protected $agreement;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ abstract class AbstractModel
         $this->chargeModel = new ChargeModel();
         $this->merchantPreferences = new MerchantPreferences();
         $this->plan = new Plan();
+        $this->agreement = new Agreement();
 
         $this->config = include __DIR__ . '/../config/billing.config.php';
         $this->credentialsConfig = include __DIR__ . '/../config/credentials.config.php';
