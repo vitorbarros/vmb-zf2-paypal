@@ -64,10 +64,7 @@ class BillingAgreement extends AbstractModel
     public function getAgreementByTransactionId($transacionId, array $param = array())
     {
         if ($transacionId != null) {
-            $result = Agreement::searchTransactions($transacionId, $param, $this->context);
-            echo '<pre>';
-            print_r($result);
-            exit;
+           //TODO implementar essa funcionalidade
         }
         throw new \Exception("Transacion Id cannot be null");
     }
