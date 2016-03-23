@@ -1,7 +1,6 @@
 <?php
 namespace VMBPayPal\Agreement;
 
-use PayPal\Api\Agreement;
 use VMBPayPal\AbstractClass\AbstractModel;
 
 class BillingAgreement extends AbstractModel
