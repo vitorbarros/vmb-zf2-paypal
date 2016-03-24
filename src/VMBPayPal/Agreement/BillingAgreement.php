@@ -1,6 +1,7 @@
 <?php
 namespace VMBPayPal\Agreement;
 
+use PayPal\Api\Agreement;
 use VMBPayPal\AbstractClass\AbstractModel;
 
 class BillingAgreement extends AbstractModel
@@ -12,7 +13,7 @@ class BillingAgreement extends AbstractModel
     {
         parent::__construct();
         $date = new \DateTime("tomorrow");
-        $date = str_replace(" ","T",$date->format('Y-m-d H:i:s')) . 'Z';
+        $date = str_replace(" ", "T", $date->format('Y-m-d H:i:s')) . 'Z';
         $this->startDate = $date;
     }
 
@@ -50,12 +51,22 @@ class BillingAgreement extends AbstractModel
 
     }
 
+    public function getAgreement($agreementId)
+    {
+        try {
+            return Agreement::get($agreementId, $this->context);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+    }
+
     public function executeAgreement($token)
     {
-        try{
-            $agreement = $this->agreement->execute($token,$this->context);
+        try {
+            $agreement = $this->agreement->execute($token, $this->context);
             return $agreement->getId();
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
