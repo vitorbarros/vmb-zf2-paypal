@@ -1,1 +1,2 @@
-# vmb-zf2-paypal
+# Zend Framework 2 PayPal Module
+## Módulo em desenvolvimento
