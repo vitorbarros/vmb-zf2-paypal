@@ -45,7 +45,7 @@ class BillingAgreement extends AbstractModel
             $agreement = $this->agreement->create($this->context);
             return $agreement->getApprovalLink();
         } catch (\Exception $e) {
-            return $e->getMessage();
+            throw $e;
         }
 
     }
@@ -56,16 +56,8 @@ class BillingAgreement extends AbstractModel
             $agreement = $this->agreement->execute($token,$this->context);
             return $agreement->getId();
         }catch(\Exception $e) {
-            return $e->getMessage();
+            throw $e;
         }
-    }
-
-    public function getAgreementByTransactionId($transacionId, array $param = array())
-    {
-        if ($transacionId != null) {
-           //TODO implementar essa funcionalidade
-        }
-        throw new \Exception("Transacion Id cannot be null");
     }
 
 }

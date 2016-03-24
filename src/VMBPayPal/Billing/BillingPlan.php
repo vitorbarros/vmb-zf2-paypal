@@ -75,7 +75,7 @@ abstract class BillingPlan extends AbstractModel
             return $retorno->getId();
 
         } catch (\Exception $e) {
-            return $e->getMessage();
+            throw $e;
         }
 
     }
@@ -103,7 +103,7 @@ abstract class BillingPlan extends AbstractModel
                 return $createdPlan->getId();
 
             } catch (\Exception $e) {
-                return $e->getMessage();
+                throw $e;
             }
         }
         throw new \Exception("Status and Plan id cannot be null");
@@ -115,7 +115,7 @@ abstract class BillingPlan extends AbstractModel
             try {
                 return Plan::all($parans, $this->context);
             } catch (\Exception $e) {
-                return $e->getMessage();
+                throw $e;
             }
         }
         throw new \Exception("Parans cannot be null");
@@ -128,7 +128,7 @@ abstract class BillingPlan extends AbstractModel
             try {
                 return Plan::get($billingId, $this->context);
             } catch (\Exception $e) {
-                return $e->getMessage();
+                throw $e;
             }
         }
         throw new \Exception("Plan id cannot be null");
@@ -145,7 +145,7 @@ abstract class BillingPlan extends AbstractModel
                 $plan->delete($this->context);
                 return $plan->getId();
             } catch (\Exception $e) {
-                return $e->getMessage();
+                throw $e;
             }
         }
         throw new \Exception("Plan id cannot be null");
