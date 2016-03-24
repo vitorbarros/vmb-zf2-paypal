@@ -61,11 +61,20 @@ class BillingAgreement extends AbstractModel
 
     }
 
+    public function searchTransactions($agreementId, array $params = array())
+    {
+        try {
+            return Agreement::searchTransactions($agreementId, $params, $this->context);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     public function executeAgreement($token)
     {
         try {
             $agreement = $this->agreement->execute($token, $this->context);
-            return $agreement->getId();
+            return Agreement::get($agreement->getId(), $this->context);
         } catch (\Exception $e) {
             throw $e;
         }
