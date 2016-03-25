@@ -10,7 +10,6 @@
             "name": "Vitor Barros",
             "email": "vitormonteirodebarros@gmail.com"
         }
-<<<<<<< HEAD
     ],
     "autoload": {
         "psr-0": {
@@ -18,7 +17,4 @@
             "PayPal\\":"vendor/paypal/rest-api-sdk-php/lib/"
         }
     }
-=======
-    ]
->>>>>>> c8fa923049b00a862779c00e979f2de7442d58c8
 }
