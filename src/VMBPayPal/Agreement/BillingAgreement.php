@@ -80,9 +80,18 @@ class BillingAgreement extends AbstractModel
         }
     }
 
-    public function cancelAgreement()
+    public function cancelAgreement($agreementId, $description)
     {
-        
+        if ($agreementId) {
+            try {
+                $agreement = Agreement::get($agreementId, $this->context);
+                $agreement->suspend($description, $this->context);
+                return $agreement;
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
+        throw new \Exception("Agreement id cannot be null");
     }
 
 }
