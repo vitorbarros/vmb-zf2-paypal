@@ -80,4 +80,9 @@ class BillingAgreement extends AbstractModel
         }
     }
 
+    public function cancelAgreement()
+    {
+        
+    }
+
 }
