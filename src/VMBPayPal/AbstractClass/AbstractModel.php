@@ -3,6 +3,8 @@ namespace VMBPayPal\AbstractClass;
 
 use PayPal\Api\Agreement;
 use PayPal\Api\AgreementStateDescriptor;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Payer;
 use PayPal\Api\PaymentDefinition;
@@ -27,12 +29,16 @@ abstract class AbstractModel
     protected $payer;
     protected $shippingAddress;
     protected $agreementStateDescriptor;
+    protected $item;
+    protected $itemList;
+    protected $paypalPaymentConfig;
 
     public function __construct()
     {
 
         $this->credentialsConfig = include __DIR__ . '/../config/credentials.config.php';
         $this->config = include __DIR__ . '/../config/billing.config.php';
+        $this->paypalPaymentConfig = include __DIR__ . '/../config/paypalPaymentDefault.config.php';
 
         $this->context = new ApiContext(new OAuthTokenCredential($this->credentialsConfig['client_id'], $this->credentialsConfig['client_secret']));
 
@@ -44,7 +50,17 @@ abstract class AbstractModel
         $this->payer = new Payer();
         $this->shippingAddress = new ShippingAddress();
         $this->agreementStateDescriptor = new AgreementStateDescriptor();
+        $this->item = new Item();
+        $this->itemList = new ItemList();
 
+    }
+
+    protected function paypalPaymentVerify(array $data)
+    {
+        $diff = array_diff_key($this->paypalPaymentConfig['item'], $data);
+        if (!empty($diff)) {
+            throw new \Exception("Array item is invalid, please check the config file");
+        }
     }
 
     protected function dataFormat(array $dados)
