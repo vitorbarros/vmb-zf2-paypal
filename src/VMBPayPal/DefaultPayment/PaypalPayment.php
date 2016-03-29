@@ -7,6 +7,11 @@ use VMBPayPal\AbstractClass\AbstractModel;
 class PaypalPayment extends AbstractModel
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     private $itensArray = array();
     private $total = 0;
 

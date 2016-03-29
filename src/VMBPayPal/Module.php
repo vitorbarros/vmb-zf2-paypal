@@ -5,6 +5,7 @@ use PayPal\Api\PaymentDefinition;
 use PayPal\Api\Plan;
 use VMBPayPal\Service\AgreementService;
 use VMBPayPal\Service\BillingService;
+use VMBPayPal\Service\PayPalPaymentService;
 
 class Module
 {
@@ -33,6 +34,9 @@ class Module
                 },
                 'VMBPayPal\Service\Agreement' => function($sm) {
                     return new AgreementService();
+                },
+                'VMBPayPal\Service\PayPalPayment' => function($sm) {
+                    return new PayPalPaymentService();
                 },
             )
         );
