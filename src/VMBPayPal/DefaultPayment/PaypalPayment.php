@@ -76,7 +76,7 @@ class PaypalPayment extends AbstractModel
                     ->setTransactions(array($this->transaction));
 
                 $this->payment->create($this->context);
-                return $this->payment;
+                return $this->payment->getApprovalLink();
 
             } catch (\Exception $e) {
                 throw $e;
