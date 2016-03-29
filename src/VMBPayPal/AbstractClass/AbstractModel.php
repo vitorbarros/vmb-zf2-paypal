@@ -2,6 +2,7 @@
 namespace VMBPayPal\AbstractClass;
 
 use PayPal\Api\Agreement;
+use PayPal\Api\AgreementStateDescriptor;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Payer;
 use PayPal\Api\PaymentDefinition;
@@ -25,6 +26,7 @@ abstract class AbstractModel
     protected $agreement;
     protected $payer;
     protected $shippingAddress;
+    protected $agreementStateDescriptor;
 
     public function __construct()
     {
@@ -41,6 +43,7 @@ abstract class AbstractModel
         $this->agreement = new Agreement();
         $this->payer = new Payer();
         $this->shippingAddress = new ShippingAddress();
+        $this->agreementStateDescriptor = new AgreementStateDescriptor();
 
     }
 

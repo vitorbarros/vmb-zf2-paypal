@@ -82,10 +82,12 @@ class BillingAgreement extends AbstractModel
 
     public function cancelAgreement($agreementId, $description)
     {
+
         if ($agreementId) {
             try {
+                $this->agreementStateDescriptor->setNote($description);
                 $agreement = Agreement::get($agreementId, $this->context);
-                $agreement->suspend($description, $this->context);
+                $agreement->suspend($this->agreementStateDescriptor,$this->context);
                 return $agreement;
             } catch (\Exception $e) {
                 throw $e;
