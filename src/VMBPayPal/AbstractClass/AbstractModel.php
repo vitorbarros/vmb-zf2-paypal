@@ -3,14 +3,18 @@ namespace VMBPayPal\AbstractClass;
 
 use PayPal\Api\Agreement;
 use PayPal\Api\AgreementStateDescriptor;
+use PayPal\Api\Amount;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Payer;
+use PayPal\Api\Payment;
 use PayPal\Api\PaymentDefinition;
 use PayPal\Api\Plan;
 use PayPal\Api\ChargeModel;
+use PayPal\Api\RedirectUrls;
 use PayPal\Api\ShippingAddress;
+use PayPal\Api\Transaction;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
 
@@ -32,6 +36,10 @@ abstract class AbstractModel
     protected $item;
     protected $itemList;
     protected $paypalPaymentConfig;
+    protected $amount;
+    protected $transaction;
+    protected $redirectUrl;
+    protected $payment;
 
     public function __construct()
     {
@@ -52,6 +60,10 @@ abstract class AbstractModel
         $this->agreementStateDescriptor = new AgreementStateDescriptor();
         $this->item = new Item();
         $this->itemList = new ItemList();
+        $this->amount = new Amount();
+        $this->transaction = new Transaction();
+        $this->redirectUrl = new RedirectUrls();
+        $this->payment = new Payment();
 
     }
 
