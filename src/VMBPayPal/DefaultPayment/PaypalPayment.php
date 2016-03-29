@@ -85,6 +85,18 @@ class PaypalPayment extends AbstractModel
         throw new \Exception("Array itens cannot be empty");
     }
 
+    public function executePayment($paymentId)
+    {
+        if ($paymentId) {
+            try {
+                
+            } catch (\Exception $e) {
+
+            }
+        }
+        throw new \Exception("Payment Id cannot be null");
+    }
+
     public function newShipping(array $shipping)
     {
         $detaisl = new Details();
