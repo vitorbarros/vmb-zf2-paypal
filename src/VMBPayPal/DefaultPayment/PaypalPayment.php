@@ -89,7 +89,7 @@ class PaypalPayment extends AbstractModel
     {
         if ($paymentId) {
             try {
-                
+
             } catch (\Exception $e) {
 
             }
