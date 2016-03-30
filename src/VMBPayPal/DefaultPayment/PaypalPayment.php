@@ -25,7 +25,7 @@ class PaypalPayment extends AbstractModel
      * @return \PayPal\Api\Payment
      * @throws \Exception
      */
-    public function newPayment(array $itens, array $shipping = array(), $currency, $paymentDescription, array $redirectUrls)
+    public function newPayment(array $itens, array $shipping, $currency, $paymentDescription, array $redirectUrls)
     {
         $shippingInformation = null;
 
@@ -54,11 +54,15 @@ class PaypalPayment extends AbstractModel
             try {
 
                 $this->itemList->setItems($this->itensArray);
-                if (!empty($shipping)) {
-                    $shippingInformation = $this->newShipping($shipping);
-                    $this->total += $shipping['tax'];
-                    $this->total += $shipping['subtotal'];
-                }
+
+                $shippingInformation = $this->newShipping(array(
+                    'shipping' => $shipping['shipping'],
+                    'tax' => $shipping['tax'],
+                    'subtotal' => $this->total,
+                ));
+                $this->total += $shipping['tax'];
+                $this->total += $shipping['shipping'];
+
                 $this->amount->setCurrency($currency)
                     ->setTotal($this->total)
                     ->setDetails($shippingInformation);
@@ -86,18 +90,24 @@ class PaypalPayment extends AbstractModel
         throw new \Exception("Array itens cannot be empty");
     }
 
-    public function executePayment($paymentId)
+    public function executePayment($paymentId, $payerId)
     {
-        if ($paymentId) {
+
+        if ($paymentId && $payerId) {
             try {
-                $payment = Payment::get($paymentId, $this->context);
-                //$this->paymentExecution->
+                $payment = Payment::get($paymentId,$this->context);
+                echo '<pre>';
+                print_r($payment);
+                exit;
+                $this->paymentExecution->setPayerId($payerId);
+
 
             } catch (\Exception $e) {
-
+                echo $e->getMessage();
+                exit;
             }
         }
-        throw new \Exception("Payment Id cannot be null");
+        throw new \Exception("Payment Id and Payer id cannot be null");
     }
 
     public function newShipping(array $shipping)
