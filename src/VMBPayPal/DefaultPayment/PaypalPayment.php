@@ -2,6 +2,7 @@
 namespace VMBPayPal\DefaultPayment;
 
 use PayPal\Api\Details;
+use PayPal\Api\Payment;
 use VMBPayPal\AbstractClass\AbstractModel;
 
 class PaypalPayment extends AbstractModel
@@ -89,6 +90,8 @@ class PaypalPayment extends AbstractModel
     {
         if ($paymentId) {
             try {
+                $payment = Payment::get($paymentId, $this->context);
+                //$this->paymentExecution->
 
             } catch (\Exception $e) {
 

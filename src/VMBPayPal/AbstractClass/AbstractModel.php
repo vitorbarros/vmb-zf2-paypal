@@ -10,6 +10,7 @@ use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
 use PayPal\Api\PaymentDefinition;
+use PayPal\Api\PaymentExecution;
 use PayPal\Api\Plan;
 use PayPal\Api\ChargeModel;
 use PayPal\Api\RedirectUrls;
@@ -40,6 +41,7 @@ abstract class AbstractModel
     protected $transaction;
     protected $redirectUrl;
     protected $payment;
+    protected $paymentExecution;
 
     public function __construct()
     {
@@ -64,6 +66,7 @@ abstract class AbstractModel
         $this->transaction = new Transaction();
         $this->redirectUrl = new RedirectUrls();
         $this->payment = new Payment();
+        $this->paymentExecution = new PaymentExecution();
 
     }
 
