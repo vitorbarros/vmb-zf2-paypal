@@ -95,7 +95,7 @@ class PaypalPayment extends AbstractModel
 
         if ($paymentId && $payerId) {
             try {
-                $payment = Payment::get($paymentId,$this->context);
+                $payment = Payment::get($paymentId, $this->context);
                 echo '<pre>';
                 print_r($payment);
                 exit;
