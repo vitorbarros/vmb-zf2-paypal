@@ -5,6 +5,10 @@ use PayPal\Api\Details;
 use PayPal\Api\Payment;
 use VMBPayPal\AbstractClass\AbstractModel;
 
+use PayPal\Api\Amount;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\Transaction;
+
 class PaypalPayment extends AbstractModel
 {
 
@@ -90,27 +94,57 @@ class PaypalPayment extends AbstractModel
         throw new \Exception("Array itens cannot be empty");
     }
 
-    public function executePayment($paymentId, $payerId, array $shipping, $currency)
+    public function executePayment($paymentId, $payerId, array $shipping = array(), $currency, $total)
     {
 
         if ($paymentId && $payerId) {
             try {
+
                 $payment = Payment::get($paymentId, $this->context);
-                $this->paymentExecution->setPayerId($payerId);
 
-                $this->details->setShipping($shipping['shipping'])
-                    ->setTax($shipping['tax'])
-                    ->setSubtotal($shipping['subtotal']);
+                $execution = new PaymentExecution();
+                $execution->setPayerId($payerId);
 
-                $this->amount->setCurrency($currency)
-                    ->setTotal(($shipping['shipping'] + $shipping['tax'] + $shipping['subtotal']))
-                    ->setDetails($this->details);
+                $transaction = new Transaction();
+                $amount = new Amount();
+                $details = new Details();
 
-                $this->transaction->setAmount($this->amount);
-                $this->paymentExecution->addTransaction($this->transaction);
-                $payment->execute($this->paymentExecution, $this->context);
+                $details->setShipping(2.2)
+                    ->setTax(1.3)
+                    ->setSubtotal(17.50);
+
+                $amount->setCurrency($currency);
+                $amount->setTotal(21);
+                $amount->setDetails($details);
+                $transaction->setAmount($amount);
+
+                $execution->addTransaction($transaction);
+                $payment->execute($execution, $this->context);
 
                 return Payment::get($paymentId, $this->context);
+
+//                $payment = Payment::get($paymentId, $this->context);
+//                $this->paymentExecution->setPayerId($payerId);
+//
+//                if (!empty($shipping)) {
+//                    $this->details->setShipping($shipping['shipping'])
+//                        ->setTax($shipping['tax'])
+//                        ->setSubtotal($shipping['subtotal']);
+//
+//                    $this->amount->setCurrency($currency)
+//                        ->setTotal($total)
+//                        ->setDetails($this->details);
+//                }else{
+//                    $this->amount->setCurrency($currency)
+//                        ->setTotal($total)
+//                        ->setDetails(null);
+//                }
+//
+//                $this->transaction->setAmount($this->amount);
+//                $this->paymentExecution->addTransaction($this->transaction);
+//
+//                $payment->execute($this->paymentExecution, $this->context);
+//                return Payment::get($paymentId, $this->context);
 
             } catch (\Exception $e) {
                 throw $e;
