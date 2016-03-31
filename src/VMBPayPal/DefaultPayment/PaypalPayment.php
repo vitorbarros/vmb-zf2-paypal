@@ -101,50 +101,28 @@ class PaypalPayment extends AbstractModel
             try {
 
                 $payment = Payment::get($paymentId, $this->context);
+                $this->paymentExecution->setPayerId($payerId);
 
-                $execution = new PaymentExecution();
-                $execution->setPayerId($payerId);
+                if (!empty($shipping)) {
+                    $shippingInformation = $this->newShipping(array(
+                        'shipping' => $shipping['shipping'],
+                        'tax' => $shipping['tax'],
+                        'subtotal' => $total,
+                    ));
 
-                $transaction = new Transaction();
-                $amount = new Amount();
-                $details = new Details();
+                    $this->amount->setCurrency($currency)
+                        ->setTotal($total)
+                        ->setDetails($shippingInformation);
+                }else{
+                    $this->amount->setCurrency($currency)
+                        ->setTotal($total);
+                }
 
-                $details->setShipping(2.2)
-                    ->setTax(1.3)
-                    ->setSubtotal(17.50);
+                $this->transaction->setAmount($this->amount);
+                $this->paymentExecution->addTransaction($this->transaction);
 
-                $amount->setCurrency($currency);
-                $amount->setTotal(21);
-                $amount->setDetails($details);
-                $transaction->setAmount($amount);
-
-                $execution->addTransaction($transaction);
-                $payment->execute($execution, $this->context);
-
+                $payment->execute($this->paymentExecution, $this->context);
                 return Payment::get($paymentId, $this->context);
-
-//                $payment = Payment::get($paymentId, $this->context);
-//                $this->paymentExecution->setPayerId($payerId);
-//
-//                if (!empty($shipping)) {
-//                    $this->details->setShipping($shipping['shipping'])
-//                        ->setTax($shipping['tax'])
-//                        ->setSubtotal($shipping['subtotal']);
-//
-//                    $this->amount->setCurrency($currency)
-//                        ->setTotal($total)
-//                        ->setDetails($this->details);
-//                }else{
-//                    $this->amount->setCurrency($currency)
-//                        ->setTotal($total)
-//                        ->setDetails(null);
-//                }
-//
-//                $this->transaction->setAmount($this->amount);
-//                $this->paymentExecution->addTransaction($this->transaction);
-//
-//                $payment->execute($this->paymentExecution, $this->context);
-//                return Payment::get($paymentId, $this->context);
 
             } catch (\Exception $e) {
                 throw $e;
