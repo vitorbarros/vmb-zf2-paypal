@@ -4,6 +4,7 @@ namespace VMBPayPal\AbstractClass;
 use PayPal\Api\Agreement;
 use PayPal\Api\AgreementStateDescriptor;
 use PayPal\Api\Amount;
+use PayPal\Api\Details;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\MerchantPreferences;
@@ -42,6 +43,7 @@ abstract class AbstractModel
     protected $redirectUrl;
     protected $payment;
     protected $paymentExecution;
+    protected $details;
 
     public function __construct()
     {
@@ -67,6 +69,7 @@ abstract class AbstractModel
         $this->redirectUrl = new RedirectUrls();
         $this->payment = new Payment();
         $this->paymentExecution = new PaymentExecution();
+        $this->details = new Details();
 
     }
 

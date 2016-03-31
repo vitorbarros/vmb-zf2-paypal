@@ -90,21 +90,30 @@ class PaypalPayment extends AbstractModel
         throw new \Exception("Array itens cannot be empty");
     }
 
-    public function executePayment($paymentId, $payerId)
+    public function executePayment($paymentId, $payerId, array $shipping, $currency)
     {
 
         if ($paymentId && $payerId) {
             try {
                 $payment = Payment::get($paymentId, $this->context);
-                echo '<pre>';
-                print_r($payment);
-                exit;
                 $this->paymentExecution->setPayerId($payerId);
 
+                $this->details->setShipping($shipping['shipping'])
+                    ->setTax($shipping['tax'])
+                    ->setSubtotal($shipping['subtotal']);
+
+                $this->amount->setCurrency($currency)
+                    ->setTotal(($shipping['shipping'] + $shipping['tax'] + $shipping['subtotal']))
+                    ->setDetails($this->details);
+
+                $this->transaction->setAmount($this->amount);
+                $this->paymentExecution->addTransaction($this->transaction);
+                $payment->execute($this->paymentExecution, $this->context);
+
+                return Payment::get($paymentId, $this->context);
 
             } catch (\Exception $e) {
-                echo $e->getMessage();
-                exit;
+                throw $e;
             }
         }
         throw new \Exception("Payment Id and Payer id cannot be null");
