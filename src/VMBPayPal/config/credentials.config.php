@@ -2,6 +2,6 @@
 namespace VMBPayPal\config;
 
 return array(
-    'client_id' => 'AQnnqxp-Ha2PfZGPBMUH3KglT-FgQSOJXc8GpnzViKdBblesql3ACJwAapUtKf8GMvFlUH9ayO78Thw_',
-    'client_secret' => 'EJFcpVYfCNvempUtPhb7bNhYNEAhJ_RNtbIvMM1Ki7jpth_2w6uL3SwaQb2sN1YjFOSXOFbWKFa0IyzD',
+    'client_id' => 'AQBUitNCAjwX3uJKGiLMzlz-N5xGF0Q9F7yl0DqWeqLeTiHE3PWAcBYzI-suFBNV142X4ha7lJ13MRR6',
+    'client_secret' => 'EH1VV4OWsQe0Q1DAkbIb7SZ00stVuRrC0V6bwiJSc4g6ZxHcJFCmfVC0Z9WMb91T-35g3E-0Vb1hf09L',
 );
